@@ -1,19 +1,18 @@
 FROM golang:1.8.5-jessie
 
-RUN go get github.com/Masterminds/glide
+# install dep
+RUN go get github.com/golang/dep/cmd/dep
 
-# create a working directory
 WORKDIR /go/src/app
-
-
-ADD glide.yaml glide.yaml
-ADD glide.lock glide.lock
-RUN glide install
-
-# add source code
+ADD src/jokes/Gopkg.toml src/jokes/Gopkg.toml
+ADD src/jokes/Gopkg.lock src/jokes/Gopkg.lock
 ADD src src
 ADD views views
 
-RUN go build src/main.go
+WORKDIR /go/src/app/src/jokes
+RUN dep ensure --vendor-only
+
+WORKDIR /go/src/app
+RUN go build src/jokes/main.go
 # run the binary
 CMD ["./main"]
