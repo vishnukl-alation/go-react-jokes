@@ -1,0 +1,6 @@
+package: ""
+import:
+- package: github.com/gin-gonic/gin
+- package: github.com/gin-gonic/contrib
+  subpackages:
+  - static
